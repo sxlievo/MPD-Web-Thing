@@ -1,0 +1,81 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #202020; /* Set background color */
+    font-family: "Inter", sans-serif; /* Use Inter font for the body */
+  }
+  #main-rectangle {
+    width: 800px;
+    height: 480px;
+    background-color: #202020; /* Main rectangle color */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative; /* For positioning inner elements */
+    overflow: hidden; /* Prevent overflow */
+  }
+  #info {
+    display: flex; /* Use flexbox for layout */
+    margin-bottom: 10px; /* Space between info and control bar */
+    align-items: center; /* Center items vertically */
+  }
+  #cover-art {
+    width: 244px; /* Increased size */
+    height: 244px; /* Increased size */
+    border-radius: 5px; /* Rounded corners for cover art */
+    margin-right: 20px; /* Space between image and text */
+    padding: 10px;
+  }
+  .info-item {
+    font-size: 24px; /* Increased font size */
+    color: white; /* Set text color to white */
+    margin: 0; /* Remove margin for consistent spacing */
+  }
+  #song-artist,
+  #song-album {
+    font-family: "Lato", sans-serif; /* Use Lato font for artist and album */
+    color: #777777;
+  }
+  #control-bar {
+    width: 800px;
+    height: 179.03px; /* Increased height */
+    background-color: #151515; /* Control bar color */
+    border-radius: 5px;
+    position: absolute; /* Positioning within the main rectangle */
+    bottom: 0px; /* 10 pixels from the bottom */
+  }
+  #progress {
+    height: 5px; /* Increased height */
+    background-color: #ffffff; /* Background color for the progress bar */
+    width: 100%; /* Full width */
+    position: absolute; /* Position it at the top of the control bar */
+    top: 0;
+    transition: width 0.5s ease; /* Smooth transition for width change */
+    border-radius: 10px; /* Rounded corners */
+  }
+  .controls {
+    display: flex;
+    justify-content: space-around; /* Evenly distribute controls */
+    align-items: center;
+    height: 100%;
+    margin-top: 10px; /* Space below the progress bar */
+  }
+  button {
+    background: none; /* Transparent background */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor */
+    color: white; /* Set icon color to white */
+    display: flex; /* Use flex to align icon */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+  }
+
+  #song-title {
+    color: #ffffff;
+    font-size: 28px; /* Increased font size for title */
+  }
+
+  svg {
+    width: 58px; /* Set width for SVG */
+    height: 58px; /* Set height for SVG */
+  }

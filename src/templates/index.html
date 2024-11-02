@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MPD Music Player</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+  <body>
+    <div id="main-rectangle">
+      <div id="info">
+        <img
+          id="cover-art"
+          src="https://placehold.co/244x243"
+          alt="Cover Art"
+        />
+        <div>
+          <div class="info-item" id="song-title">Loading...</div>
+          <div class="info-item" id="song-artist">Loading...</div>
+          <div class="info-item" id="song-album">Loading...</div>
+        </div>
+      </div>
+
+      <div id="control-bar">
+        <div id="progress"></div>
+        <div class="controls">
+          <button onclick="controlMusic('previous')" title="Previous">
+            <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <rect y="0.0496826" width="58" height="57.6875" fill="url(#pattern0_216_11)"/>
+                <defs>
+                <pattern id="pattern0_216_11" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlink:href="#image0_216_11" transform="matrix(0.0110513 0 0 0.0111111 0.00269374 0)"/>
+                </pattern>
+                <image id="image0_216_11" width="90" height="90" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAACPUlEQVR4nO3czY4MYRTG8SORkWHLlguw4Q583AF7S0suYbAxmyG23AXuwNeeBTGWZkPYEZJJ/tJSkgk1XT1TVadP6f9v09snT96uOVP9vm+EJEmSJEmSJEmSlgg4DtwBPgA/m8/bwHoUB5wAtoDPwA6wCaxF0ZJf0e5l5bKBc8DbltybUU2zkue5FcUAR4AbwI99Mu9ENc1jYp7tKAQ4CTzpyExUA+x2ZN6NIoBLzXO4U1QzhdDA0dkjbIFFUSbzP6qHBk4DzxctuELmVpVDA1eBrwct2aIXNBspgQeHKdiiFwScBd70KdkV3T0bXwe+9y3ZoufPxo+HKNii9wFcBD4ysKhmWaE5xGxs0UmzsUUnzcYWnTQbW3TSbGzRSbOxRfd4b2zRe0SR2dgVnTQbW3T8LvnM2LPxyhdN0my8skUDx4BHFBTV9AkN3KeoqKZPaOALRUU1fUJj0WlF36OoqKZPaGANeEhBUc0QoYErjncJRe95mf+MIqKaIUPjv+A5Rf8BXPCl0l/G+hoywhaCg4hqxg4NXAO+jV/tcJlHkfhT1uvx6x0u8+CyQuOPs7mrg6SZO6pZRmgSZu6oZlmhcUtY7urATY55X0O37SYV3ZTtRvRI5NGKRB4WSubxt0Qe6Ez0vxxRntKh+8tTPnTfdY3E+ygEOAU8nWLRsyt95tmIYpqZ++bULkZZb670afOi+FU/54F3LbnvRkVN2bM/NtvN5VWzz43KJbdcXvWp9OVVkiRJkiRJkiRJsSp+AWLW/ObXHSgjAAAAAElFTkSuQmCC"/>
+                </defs>
+                </svg>
+                
+          </button>
+          <button id="play-pause-btn" onclick="togglePlayPause()" title="Play/Pause">
+                <svg id="play-path" width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="58" height="58" fill="url(#pattern0_231_293)"/>
+                    <defs>
+                    <pattern id="pattern0_231_293" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_231_293" transform="scale(0.0111111)"/>
+                    </pattern>
+                    <image id="image0_231_293" width="90" height="90" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAACLUlEQVR4nO3dQWoUQRTG8Q6SiBDBTdClrpONHkBP4TZLryC5QUQxyTJX8AozF0j26fUIowvDLIRseoLzF6EHBFESU1Xv1avvd4Kqj4Lpr+bNdNeJiIiIiIhEBGwB74CvwCVwBOxYrysc4JA/fQcOgAfW6wtjPMl/MwfeAPes11k9bqYHXluvtYWg1ybAc+s1V4nbWwGfgGfWa48e9NoAnACPrPdQBe5uAbwF7lvvJXrQazNgH9iw3pNLpHcGvLTeVwtB//6Esme9PzfIawmcAo+71lHG1Vj1H3atoqx5s5UeG31zlR5b02YqPfZWTVR6/BhCV3r8WYSs9Pg1C1Xp8e88RKWnHpOqKz11uR4r/ZOuNtTpqrpKT93m1VR6YujdV3pimQIvOo+IZ+Wy0hPX4KrSE9/CRaWnHZ9NKz3tOQdeKeiolZ62LYHjX8P4CrqMDwq6jEsFXYaCLuS9TnT+D8OPwKaCzkePd5mpsGSmCp6ZLpUy0zVpZrr4b3o6lRh6fTmbl8YNMtMATWYaCStAQ46ZxfglLn7NNIjeQmVODT8GV5NFqVmni9fKnJpxyFO3lTk1o4B795U5tcIBz6uZ0E+tcGXe7lqVOeCl/hglf9ATYNf2GDmSIeCzEJU5tYQBz0JV5tQSBLwIWZlTu0PAQ+jKnNp/BPxjrMxPrddelVuGPGmmMqd2w4AvmqvMqQFf/hFwu5U5Nb1MoezrQQ7Hk/1NrwcRERERERHp6vMTtSzZqzczTxgAAAAASUVORK5CYII="/>
+                    </defs>
+                    </svg>
+                    
+                <path d="M8 5v14l11-7z" />
+            </svg>
+                <svg id="pause-path" width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect y="0.0496826" width="58" height="57.6875" fill="url(#pattern0_216_12)"/>
+                    <defs>
+                    <pattern id="pattern0_216_12" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_216_12" transform="matrix(0.0110513 0 0 0.0111111 0.00269374 0)"/>
+                    </pattern>
+                    <image id="image0_216_12" width="90" height="90" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAABv0lEQVR4nO3cPUoDYRhF4Vupe9AlGt2lP5VxKRL7I4EpbIKYfMLl+N4+8ByYmXRvMpvNZrPZbDabzWaz2Ww2OzngBngEXoFPTu8TeAEegOv/4lky4A545/fbH39r96x8cs6J+h53bfUs2/Z6Xrqd1bNs2zfw0j1bPcsGHBaEHayeZWPRIvXEGkaZJ9YwyjyxhlHmiTWMMk+sYZR5Yg2jzBNrGGWeWMMo88QaRpkn1jDKPLGGUeaJNYwyT6xhlHliDaPME2sYZZ5YwyjzxBpGmSfWMMo8sYZR5ok1jDJPrGGUeWINo8wTaxhlnljDKPPEGkaZJ9YwyjyxhlHmiTWMMk+sYZR5Yg2jzBNrGGWeWMMo88QaRpkn1jDKPLGGUeaJNYwyT6xhlHliDaPME2sYZZ5YwyjzxBpGmSfWMMo8sYZR5ok1jDJPrGGUeWINo8wTaxhlnljDKPPEGkaZJ9YwyjyxhlHmiTWMMk+sYZR5Unb+7MPqifWgH2WeZduu1F66e6tn2Y4HU7fDqefuDbiyev7ijPD+zKhbu2fptidpd/y+/fCHdACejq/nXz45bZ7ZbDabzWaz2Ww2m81mswj2BY0LdofAZHslAAAAAElFTkSuQmCC"/>
+                    </defs>
+                    </svg>
+                    
+                <path d="M6 6h12v12H6z" />
+            </svg>
+        </button>
+        
+          </button>
+          <button onclick="controlMusic('next')" title="Next">
+            <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <rect y="0.0496826" width="58" height="57.6875" fill="url(#pattern0_216_10)"/>
+                <defs>
+                <pattern id="pattern0_216_10" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlink:href="#image0_216_10" transform="matrix(0.00994613 0 0 0.01 0.00269374 0)"/>
+                </pattern>
+                <image id="image0_216_10" width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAACgklEQVR4nO3cMY7TQBjF8SdoEB2UcAZaEIhuS3bhCogL0EODhFbiCrTpc4NNwiHCAdJskwoWpQnij6KYAlDIZGPHb8L7SW49M/pix288HikiIiIiIiIiIiIiIiIiIiIOBngFfAa+AWPgkSoFvAA+NWNZHRPgTJUV409L4C1wUxUBPrDZuWrQXBmbrK6W+6rnytjmVO6A71sGMQeeyxzr29Q2Y7mj3AC4LVPAVcEYvuqICkJze3sgQxTSkRVkZQG8lhn+44L8MgTuykQKsjYDnspACvJ7ZnnXd2ZJQf426TOzpCBmmYVCckc3BofOLCmIWWahkNzRrcWhMktph+SOwxgCdxzGIXcczqzLzFLaCbnjsJZdZZbSDsgd/Zi0nVlKG5Y7+jNv89VqaaNyR/8GbWSW0sbkDg/TfTNLaUNyh4/FPpmltBG5w8/wOpml9ORyh6fZrpml9MRyh6/lLpml9KRyh79JSWYpPZncUYc58KSNccgd9bgEbu07DrmjLif7jkPuqMvJvuOQO+pxmVuW15/64zZ+WHKHv3Eeez0sEwx9zDJ14mOYyUUPi0y/+/ypT/OCyucpa5BXuB6PvfMscvDJIeMsA/IIhssslPNJ6rMsJfWZOhlmsXWhjguxyOcIO3LOFrso7ZTcdVCIH8DHfNLmUZB5X3tTlXZQ7losxjifRXsUZJmNA1q0ZzFm2VqjZc7ZYhelnZa7axQi2zN1yTlb7KJ0AHLnnC062OLvi45kE0z7fW9Zr5LfZqTKt4kdAfdUAeCsoCDP5A54uSFbvAFuqCLA+T+K8V61aIoybe7DF8BDVQo4bWYNrppjVMWVERERERERERERERERERERoePyE14pI9B/KIdyAAAAAElFTkSuQmCC"/>
+                </defs>
+                </svg>
+                
+          </button>
+          <button onclick="toggleShuffle()" title="Shuffle">
+            <svg
+              width="58"
+              height="58"
+              viewBox="0 0 58 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect
+                y="0.0496826"
+                width="58"
+                height="57.6875"
+                fill="url(#pattern0_216_13)"
+              />
+              <defs>
+                <pattern
+                  id="pattern0_216_13"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_216_13"
+                    transform="matrix(0.0110513 0 0 0.0111111 0.00269374 0)"
+                  />
+                </pattern>
+                <image
+                  id="image0_216_13"
+                  width="90"
+                  height="90"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAADUklEQVR4nO2by04UQRiFgYhBE0eUkHjBJ5G4IZlgTLwsXKorL++iQLxFReMDKKiJD6CIuhLi5Qk0gIkLdYUr+UzFMirMdHV1V1df5nzrnprT/5w5VV39V1+fEEIIIYQQQgghhBBCiF4FeAocKFtH4+E3X4ELZWvphUL/Qe4uCrYid0cqtNwdudByd8RCy92RCy13Ryx0ce4GdgI3ge+OL/8BfAaWgPvAxTIeAoCDwCWrYdlqMtpC8wU4HVL47RxifgILwElgIJiorRoHgFPAIrBBXB4AoyFuYD2QoPfAeLDq/tV4BPhAueRzd+BCY912DRgMUODtNtJiO7iYGMkZHd1YBEZyaBoFXlEN8keHvakdwHXgW2CBy8CeDHr2Am8pn7CToUcBhoAx4ChwBfiUQuxLnxgx1wKvU4z7EbgMTNpVyJBj3HJcHAJgG3AWWHWInvYYc8Yx1gpwxny3p9ZquzgNQAuYSxC/AbRTjNN2THwPgV0ZNdbLxd0A+oEbjr96y/FjmWu6YeaQ/hz66unihGI/Srih2YTPziZ8bi5Pke349XVxJ4DhBGd2jBBHZJixdgfQVW8XdwKYSCicmcyGU0aGGWMykKb6uzhDFMz+c93dhOvuBNTTDBdvBrdT2ykioxVQT3NcvBnchfTKcpE9QgqPjJ4B9/o4cbIU4VYhhawyehbSRYgiI0KErCgywji6pUJHgOQHE+deiEhX5AlNhgWDlneViozNKEI8i9zWI3jBkGL702c7NYCeZnb5k3L7M+12agA9zevyp/ob//V3N3qVFaXIA8CTLFHgiJB5vZz9/w34rQLbDUyzY2+3G5i31MDjCA0081lfb5GOar7usn1y54A1xw1MeYw57RhrtfEtYbbr9BBwzPbImRVEmvbdQc8fzzRGujANllO24XKsFk2OHmdYfFnK8tBhWn1ty2/ZVOoMSzcWcjaijwAvqAaVO8OCncxmAh2tMDFytRFHKwIX+h1wOG+BO2gctweRevoMizn+9gw4HuH42wnguf3ORp9hWbdLuTd20+g8sC9IJT0A9pvNIeCe1bIWOP6qs9SrG/hTzYeXqoNcHAe5OBLK4kgoiyOhFUUktKKIhNbFkdC6WAghhBBCCCGEEEIIIfpi8QvPV/AnkjPlBwAAAABJRU5ErkJggg=="
+                />
+              </defs>
+            </svg>
+          </button>
+          <button onclick="toggleRepeat()" title="Repeat">
+            <svg
+              width="58"
+              height="58"
+              viewBox="0 0 58 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect
+                y="0.0496826"
+                width="58"
+                height="57.6875"
+                fill="url(#pattern0_216_14)"
+              />
+              <defs>
+                <pattern
+                  id="pattern0_216_14"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_216_14"
+                    transform="matrix(0.0110513 0 0 0.0111111 0.00269374 0)"
+                  />
+                </pattern>
+                <image
+                  id="image0_216_14"
+                  width="90"
+                  height="90"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAADBklEQVR4nO3bO2sVQRjG8fES7whGrMUmGtDPIIgosfZSpgiIjbVfQQTFxIhai42gjWCTSiRgIRbewE7FQqNGG8FEyF/mZDYEnNlzEtyZndnnB6dJk3df9jz7zuwcY0REREREREREJFvADHAkdR3FY9kf4A6wL3U9pTe6Mg9cArakrqs4+L0DzqSurQuNrii//xf6U35HanRF+R2p0RXld6RGtyu/gQPABeAe8AL4BixSlkVgChiO3dyNwFngKbBEd3wHLgJDMZp8DHhDt70Fxppq8DbgZuorLLrRwF7gWeqrKzo6XJNf022LjT4MXVwMcie/ByaBE8BBYKdpGdbvMTDadHH9MvkDMG6nENNytOmB55ku6twHdphM0NIRblOfEe4KsMFkhDYuSoBzNQU9yK3J1gDL7MMmNrfiC2VyNnGxWtIcrtm7CC2rx02mSJXDNQXZDaLQCNf66SIk6eZQoCC7C+czaTJGjHl4LdxWp8/J1LUVxe0n+4ykrq0owEKg0btS11YU4IenyfOp6yoOMO1p9FTquooDbAduA7/c55b9W+q6imWX2TkutUVERCSSnDfYchp/7Vrjp/vc0PjbAOC6Z0F3rYn/1WnAZ0+jv6SuqyjA7sCG2+/UtRXFHQ7ymUtdW1GAU4FGPzdtAYza10kmY27C8LnbhuKG3QvR3q8ATKbcoaKPgUafT1nYkHulb1/trzCZAiYCTbZHM/anKmrMHU75h8mQfY0HfMLvSYqCRoBHgYJ6TJ778vZAZ8jpZDlcx+TX5Ks1l/Myyp5HKIdLaDTLcfGw5lJsNh9NmsM5N5rl6WKiJpPjvLCu5uG1Nrhi2nnnHnI3znTNCLfaLLA1eQ4X7lUjhyTXk8MFm22qyevK4QItuW9zY3GhRtMb4aJMF12MjiW74rOLkejvBgt+GC4AX+1Wp92FsxtEyfYuPMvsuiVpLSNrbvhxl19qdNOAze6rNqc7OgJgD3C55tcCK2LUU7xB8ttInPw2Eie/jcTJbyPNooDjBiIiIiIiIiIipuP+Aqq07g3H6PCbAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let isPlaying = false; // Track the play state
+
+      function fetchCurrentSong() {
+        fetch("/current_song")
+          .then((response) => response.json())
+          .then((data) => {
+            const song = data.current_song;
+            document.getElementById("song-title").textContent =
+              song.title || "Unknown";
+            document.getElementById("song-artist").textContent =
+              song.artist || "Unknown";
+            document.getElementById("song-album").textContent =
+              song.album || "Unknown";
+            updateProgress(data.elapsed_time, data.duration);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }
+
+      function updateProgress(elapsed, duration) {
+        const progressBar = document.getElementById("progress");
+        const elapsedTime = parseFloat(elapsed) || 0;
+        const totalDuration = parseFloat(duration) || 0;
+
+        const progressPercentage = (elapsedTime / totalDuration) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+      }
+
+      function controlMusic(action) {
+        fetch(`/control_music/${action}`, { method: "POST" })
+          .then(() => {
+            if (action === "play" || action === "pause") {
+              isPlaying = !isPlaying; // Toggle play state
+              updatePlayPauseButton();
+            }
+            fetchCurrentSong(); // Update song info after control action
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function togglePlayPause() {
+        if (isPlaying) {
+          controlMusic("pause");
+        } else {
+          controlMusic("play");
+        }
+      }
+
+      function updatePlayPauseButton() {
+        const playPath = document.getElementById("play-path");
+        const pausePath = document.getElementById("pause-path");
+
+        if (isPlaying) {
+          playPath.style.display = "none"; // Hide play
+          pausePath.style.display = "block"; // Show pause
+        } else {
+          playPath.style.display = "block"; // Show play
+          pausePath.style.display = "none"; // Hide pause
+        }
+      }
+
+      function toggleShuffle() {
+        fetch("/control_music/shuffle", { method: "POST" })
+          .then(() => console.log("Shuffle toggled"))
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function toggleRepeat() {
+        fetch("/control_music/repeat", { method: "POST" })
+          .then(() => console.log("Repeat toggled"))
+          .catch((error) => console.error("Error:", error));
+      }
+
+      setInterval(fetchCurrentSong, 1000);
+      fetchCurrentSong();
+    </script>
+  </body>
+</html>
