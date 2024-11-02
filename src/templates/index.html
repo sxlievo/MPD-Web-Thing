@@ -157,7 +157,7 @@
     </div>
 
     <script>
-      let isPlaying = false; // Track the play state
+      let isPlaying = false;
 
       function fetchCurrentSong() {
         fetch("/current_song")
@@ -190,10 +190,10 @@
         fetch(`/control_music/${action}`, { method: "POST" })
           .then(() => {
             if (action === "play" || action === "pause") {
-              isPlaying = !isPlaying; // Toggle play state
+              isPlaying = !isPlaying;
               updatePlayPauseButton();
             }
-            fetchCurrentSong(); // Update song info after control action
+            fetchCurrentSong();
           })
           .catch((error) => console.error("Error:", error));
       }
