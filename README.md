@@ -20,7 +20,7 @@ Install mpd-web-thing
   cd src
   python app.py
 ```
-Then go into 127.0.0.1:5000 on your web browser, MPD-Web-Thing will use localhost:6600 by default, if you want to change the port or address modify app.py.
+Then go into 127.0.0.1:5000 on your web browser, MPD-Web-Thing by default will use localhost:6600, if you want to change the port or address modify app.py.
 
 
     
