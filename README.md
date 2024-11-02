@@ -7,7 +7,7 @@ MPD Web client inspired by [Spotify's Car Thing](https://carthing.spotify.com/).
 
 ## Screenshots
 
-![App Screenshot]()
+![App Screenshot](https://github.com/sxlievo/mpd-thing/blob/main/mpd-web-thing.png)
 
 
 ## Installation
