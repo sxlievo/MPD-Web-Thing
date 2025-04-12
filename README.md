@@ -3,6 +3,8 @@
 
 MPD Web client inspired by [Spotify's Car Thing](https://carthing.spotify.com/).
 
+# hey you, yes you, im currently rewriting this project and turning it on something actually good
+
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 ## Screenshots
